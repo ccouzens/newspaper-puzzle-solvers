@@ -63,5 +63,32 @@ def check_square(game, x, y):
     numbers = sum( [line[x*3:x*3+3] for line in game[y*3:y*3+3]], [])
     return check_9_numbers(numbers)
 
+def endgame(game):
+    return next_empty_square(game) == None
+
+def next_empty_square(game):
+    for y in xrange(9):
+        line = game[y]
+        for x in xrange(9):
+            digit = line[x]
+            if digit == None:
+                return (x, y)
+    return None
+
+def recursive_solve(game):
+    if endgame(game):
+        print_game(game)
+        exit()
+    else:
+        square_x, square_y = next_empty_square(game)
+        for c in xrange(1, 10):
+            game[square_y][square_x] = c
+            if check_game_valid(game):
+                recursive_solve(game)
+            game[square_y][square_x] = None
+
 print_game(game)
-print check_game_valid(game)
+
+print
+
+recursive_solve(game)
